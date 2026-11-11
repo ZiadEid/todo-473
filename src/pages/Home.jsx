@@ -47,11 +47,11 @@ export default function Home() {
         {todos.map(({ name }, i) => (
           <div
             key={i}
-            className="group task flex justify-between items-center shadow rounded-lg p-4"
+            className="group/parent task flex justify-between items-center shadow rounded-lg p-4"
           >
             <h2 className="relative overflow-hidden font-bold text-lg tracking-wide uppercase">
               {name}
-              <span className="absolute bottom-0 right-full group-hover:right-0 duration-300 block w-full h-0.5 bg-indigo-500"></span>
+              <span className="absolute bottom-0 right-full group-hover/parent:right-0 duration-300 block w-full h-0.5 bg-indigo-500"></span>
             </h2>
             <div className="icons flex items-center gap-2">
               <EditButton />

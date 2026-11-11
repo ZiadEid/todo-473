@@ -1,9 +1,9 @@
 const DeleteButton = () => {
   return (
-    <button className="group relative flex h-10 w-10 flex-col items-center justify-center overflow-hidden rounded-lg cursor-pointer bg-red-500 hover:bg-red-600">
+    <button className="group/child relative flex h-10 w-10 flex-col items-center justify-center overflow-hidden rounded-lg cursor-pointer bg-red-500 hover:bg-red-600">
       <svg
         viewBox="0 0 1.625 1.625"
-        className="absolute -top-7 fill-white delay-100 group-hover:top-5 group-hover:animate-[spin_1.4s] group-hover:duration-1000"
+        className="absolute -top-7 fill-white delay-100 group-hover/child:top-5 group-hover/child:animate-[spin_1.4s] group-hover/child:duration-1000"
         height="12"
         width="12"
       >
@@ -15,7 +15,7 @@ const DeleteButton = () => {
         width="15"
         fill="none"
         viewBox="0 0 39 7"
-        className="origin-right duration-500 group-hover:rotate-90"
+        className="origin-right duration-500 group-hover/child:rotate-90"
       >
         <line strokeWidth="4" stroke="white" y2="5" x2="39" y1="5"></line>
         <line
