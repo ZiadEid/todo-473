@@ -3,7 +3,7 @@ const DeleteButton = () => {
     <button className="group relative flex h-10 w-10 flex-col items-center justify-center overflow-hidden rounded-lg cursor-pointer bg-red-500 hover:bg-red-600">
       <svg
         viewBox="0 0 1.625 1.625"
-        className="absolute -top-7 fill-white delay-100 group-hover:top-6 group-hover:animate-[spin_1.4s] group-hover:duration-1000"
+        className="absolute -top-7 fill-white delay-100 group-hover:top-5 group-hover:animate-[spin_1.4s] group-hover:duration-1000"
         height="12"
         width="12"
       >

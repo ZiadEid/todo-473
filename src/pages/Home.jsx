@@ -1,17 +1,31 @@
 import { Field, Formik } from "formik";
-import { Form } from "react-router";
+import { Form, useNavigate } from "react-router";
 import AddButton from "../components/shared/AddButton";
 import DeleteButton from "../components/shared/DeleteButton";
 import EditButton from "../components/shared/EditButton";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { GlobalStore } from "../stores/MainStore";
 
 export default function Home() {
+  // Hooks
+  const navigate = useNavigate();
+  const { token } = useContext(GlobalStore);
+  // Protected Route
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, [token]);
+
+  // State
   const [todos, setTodos] = useState([
     { name: "Eat" },
     { name: "Study" },
     { name: "Play" },
     { name: "Sleep" },
   ]);
+
+  // Functions
 
   return (
     <div className="h-full flex flex-col gap-8 items-center mt-10">

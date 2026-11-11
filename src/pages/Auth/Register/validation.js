@@ -1,10 +1,16 @@
 import * as yup from "yup";
 
 const passwordReg = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s]).{7,}$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const registerSchema = yup.object({
-  userName: yup.string().trim().required().min(5).max(12),
-  email: yup.string().email().trim().required(),
+  username: yup.string().trim().required().min(5).max(12),
+  email: yup
+    .string()
+    .email()
+    .trim()
+    .required()
+    .matches(emailRegex, "Invalid email address"),
   password: yup
     .string()
     .required()
