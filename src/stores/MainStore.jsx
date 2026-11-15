@@ -8,6 +8,7 @@ export default function MainStore({ children }) {
 
   // State
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [userData, setUserData] = useState(JSON.parse(localStorage.getItem("userData")))
 
   // Function
 
@@ -15,6 +16,8 @@ export default function MainStore({ children }) {
     base_url,
     token,
     setToken,
+    userData,
+    setUserData
   };
   return <GlobalStore.Provider value={data}>{children}</GlobalStore.Provider>;
 }

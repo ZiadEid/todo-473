@@ -4,6 +4,7 @@ import Register from "../pages/Auth/Register";
 import Profile from "../pages/Profile";
 import Home from "../pages/Home";
 import MainLayout from "../layouts/MainLayout";
+import NotFound from "../feedback/Errors/NotFound";
 
 export default function Router() {
   return (
@@ -16,6 +17,7 @@ export default function Router() {
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </>

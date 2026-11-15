@@ -1,6 +1,13 @@
-const DeleteButton = () => {
+const DeleteButton = ({id,  handleClick }) => {
   return (
-    <button className="group/child relative flex h-10 w-10 flex-col items-center justify-center overflow-hidden rounded-lg cursor-pointer bg-red-500 hover:bg-red-600">
+    <button
+      onClick={() => {
+        if (typeof handleClick == "function") {
+          handleClick(id);
+        }
+      }}
+      className="group/child relative flex h-10 w-10 flex-col items-center justify-center overflow-hidden rounded-lg cursor-pointer bg-red-500 hover:bg-red-600"
+    >
       <svg
         viewBox="0 0 1.625 1.625"
         className="absolute -top-7 fill-white delay-100 group-hover/child:top-5 group-hover/child:animate-[spin_1.4s] group-hover/child:duration-1000"

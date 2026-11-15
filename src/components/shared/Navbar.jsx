@@ -6,13 +6,15 @@ import { GlobalStore } from "../../stores/MainStore";
 
 const Navbar = () => {
   // Hooks
-  const { token, setToken } = useContext(GlobalStore);
+  const { token, setToken, setUserData } = useContext(GlobalStore);
   const location = useLocation();
 
   // Logout
   function logout() {
     localStorage.removeItem("token");
+    localStorage.removeItem("userData");
     setToken(null);
+    setUserData(null)
   }
   return (
     <header className="shadow-2xl py-3 rounded-lg mt-5">

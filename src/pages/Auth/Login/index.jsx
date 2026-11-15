@@ -9,7 +9,7 @@ import { useNavigate } from "react-router";
 
 const Login = () => {
   // Hooks
-  const { base_url, token, setToken } = useContext(GlobalStore);
+  const { base_url, token, setToken, setUserData } = useContext(GlobalStore);
   const navigate = useNavigate();
   // Protected Route
   useEffect(() => {
@@ -24,8 +24,11 @@ const Login = () => {
       const res = await axios.post(`${base_url}/auth/local`, values);
 
       if (res.data) {
-        localStorage.setItem("token", res.data.jwt)
+        localStorage.setItem("token", res.data.jwt);
+        localStorage.setItem("userData", JSON.stringify(res.data.user));
         setToken(res.data.jwt);
+        setUserData(res.data.user);
+
         toast.success("Login Successfully");
         setTimeout(() => {
           navigate("/");
