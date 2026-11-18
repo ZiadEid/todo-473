@@ -8,6 +8,7 @@ import axios from "axios";
 import TodoSkeleton from "../components/TodoSkeleton";
 import ErrorMessage from "../feedback/Errors/ErrorMessage";
 import toast from "react-hot-toast";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
   // Hooks
@@ -21,29 +22,32 @@ export default function Home() {
   }, [token]);
 
   // State
-  const [todos, setTodos] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
   const [todo, setTodo] = useState("");
+  const [formBtn, setFormBtn] = useState("Add Task");
+  const [updatedId, setUpdatedId] = useState(null);
 
   // Vars
   const endpoint = "todos";
+  const filterByUser = `filters[user][documentId][$eq]=${userData?.documentId}`;
 
   // Functions
-  async function getTodos() {
-    try {
-      const response = await axios.get(`${base_url}/${endpoint}`);
-      setTodos(response.data.data);
-    } catch (error) {
-      setError(true);
-    }
+  // Get Todos
 
-    setLoading(false);
-  }
-
-  useEffect(() => {
-    getTodos();
-  }, []);
+  const {
+    data: todos,
+    isLoading: loading,
+    error,
+    refetch
+  } = useQuery({
+    queryKey: ["todos"],
+    queryFn: async () => {
+      const res = await axios.get(`${base_url}/${endpoint}?${filterByUser}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data.data;
+    },
+    staleTime: 1000,
+  });
 
   const todoSkeletonList = () => {
     return (
@@ -59,20 +63,41 @@ export default function Home() {
     e.preventDefault();
     const newTodo = {
       name: todo,
+      user: userData.documentId,
     };
 
     try {
-      const res = await axios.post(`${base_url}/${endpoint}`, {
-        data: newTodo,
-      });
-
-      getTodos();
-
+      if (formBtn.toLowerCase() == "add task") {
+        await axios.post(
+          `${base_url}/${endpoint}`,
+          {
+            data: newTodo,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        toast.success("Task Created Successfully", {
+          duration: 2000,
+        });
+      } else {
+        await axios.put(
+          `${base_url}/${endpoint}/${updatedId}`,
+          {
+            data: newTodo,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        setFormBtn("Add Task");
+        toast.success("Task Updated Successfully", {
+          duration: 2000,
+        });
+      }
+      refetch()
       setTodo("");
-
-      toast.success("Task Created Successfully", {
-        duration: 2000,
-      });
+      setUpdatedId(null);
     } catch (error) {
       toast.error(error.response.data.error.message, {
         duration: 5000,
@@ -81,25 +106,35 @@ export default function Home() {
   }
 
   // Delete Todo
-  const deleteTodo = async (id) => {
+  const deleteTodo = async (documentId) => {
     try {
-      const res = await axios.delete(`${base_url}/${endpoint}/${id}`);
+      const res = await axios.delete(`${base_url}/${endpoint}/${documentId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       toast.success("Task Deleted Successfully", {
-        duration: 3000
+        duration: 3000,
       });
-      getTodos()
+      refetch()
     } catch (error) {
       toast.error(error.response.data.error.message, {
-        duration: 5000
+        duration: 5000,
       });
     }
   };
 
+  // Edit Functions
+  function getData(documentId) {
+    const todo = todos.find((todo) => todo.documentId == documentId);
+    setTodo(todo.name);
+    setFormBtn("Update Task");
+    setUpdatedId(documentId);
+  }
+
   return (
     <div className="h-full flex flex-col gap-8 items-center mt-10">
       <h1 className="text-center text-4xl font-bold">
-        Welcome
+        Welcome {""}
         <span className="hover:text-indigo-500 duration-300">
           {userData?.username}
         </span>
@@ -115,7 +150,7 @@ export default function Home() {
           placeholder="write your task here.."
           className="grow py-1 px-3 outline-0 border border-gray-300 hover:border-2 hover:border-indigo-500 rounded-lg "
         />
-        <AddButton />
+        <AddButton>{formBtn}</AddButton>
       </form>
 
       <div className="tasks w-full flex flex-col gap-4">
@@ -134,8 +169,8 @@ export default function Home() {
                 <span className="absolute bottom-0 right-full group-hover/parent:right-0 duration-300 block w-full h-0.5 bg-indigo-500"></span>
               </h2>
               <div className="icons flex items-center gap-2">
-                <EditButton />
-                <DeleteButton id={id} handleClick={deleteTodo} />
+                <EditButton id={documentId} handleClick={getData} />
+                <DeleteButton id={documentId} handleClick={deleteTodo} />
               </div>
             </div>
           ))

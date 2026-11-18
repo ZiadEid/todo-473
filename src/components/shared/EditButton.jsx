@@ -1,8 +1,15 @@
 import React from "react";
 
-const EditButton = () => {
+const EditButton = ({ handleClick, id }) => {
   return (
-    <button className="inline-flex items-center justify-center px-4 py-2 bg-[#ffc107] ease-in-out delay-75 hover:bg-[#ffca2c] cursor-pointer text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-110 active:scale-95 transition-all duration-200">
+    <button
+      onClick={() => {
+        if (typeof handleClick == "function") {
+          handleClick(id);
+        }
+      }}
+      className="inline-flex items-center justify-center px-4 py-2 bg-[#ffc107] ease-in-out delay-75 hover:bg-[#ffca2c] cursor-pointer text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-110 active:scale-95 transition-all duration-200"
+    >
       <svg
         className="h-5 w-5 mr-1 self-center items-center"
         fill="none"
